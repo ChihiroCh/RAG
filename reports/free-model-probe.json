@@ -1,0 +1,44 @@
+[
+  {
+    "kind": "text",
+    "model": "qwen4-max",
+    "available": false,
+    "error": "Error code: 403 - {'error': {'message': 'Free quota exhausted. To continue accessing the model on a paid basis, please add funds or disable the \"use free tier only\" mode in the management console.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}, 'request_id': '25b858f9-14e5-91aa-91ed-a6b1fbcc9f63'}"
+  },
+  {
+    "kind": "text",
+    "model": "qwen-max",
+    "available": false,
+    "error": "Error code: 403 - {'error': {'message': 'Free quota exhausted. To continue accessing the model on a paid basis, please add funds or disable the \"use free tier only\" mode in the management console.', 'type': 'AllocationQuota.FreeTierOnly', 'param': None, 'code': 'AllocationQuota.FreeTierOnly'}, 'id': 'chatcmpl-04cf2058-babc-9197-b3b0-ff302981171f', "
+  },
+  {
+    "kind": "text",
+    "model": "qwen-plus",
+    "available": false,
+    "error": "Error code: 403 - {'error': {'message': 'Free quota exhausted. To continue accessing the model on a paid basis, please add funds or disable the \"use free tier only\" mode in the management console.', 'type': 'AllocationQuota.FreeTierOnly', 'param': None, 'code': 'AllocationQuota.FreeTierOnly'}, 'id': 'chatcmpl-4088bcf7-d863-98c5-b1a7-85c6146079e8', "
+  },
+  {
+    "kind": "vision",
+    "model": "qwen3-vl-plus",
+    "available": false,
+    "error": "Error code: 403 - {'error': {'message': 'Free quota exhausted. To continue accessing the model on a paid basis, please add funds or disable the \"use free tier only\" mode in the management console.', 'type': 'AllocationQuota.FreeTierOnly', 'param': None, 'code': 'AllocationQuota.FreeTierOnly'}, 'id': 'chatcmpl-e97d4478-cadb-9f33-8bdf-048faae8ca9f', "
+  },
+  {
+    "kind": "vision",
+    "model": "qwen-vl-plus",
+    "available": false,
+    "error": "Error code: 404 - {'error': {'message': 'Model not exist.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}, 'id': 'chatcmpl-350c2520-c4cf-9d74-b110-0996aaf63e86', 'request_id': '350c2520-c4cf-9d74-b110-0996aaf63e86'}"
+  },
+  {
+    "kind": "vision",
+    "model": "qwen-vl-ocr-2025-11-20",
+    "available": true,
+    "answer": "```json\n{\n    \"day_3_afternoon\": [\n        \"产品设计\"\n    ],\n    \"bp_module_day_5_morning\": \"B模块：Problem\"\n}\n```"
+  },
+  {
+    "kind": "text",
+    "model": "qwen-flash",
+    "available": true,
+    "answer": "[{\"question\":\"1\",\"answer\":\"公司B\"},{\"question\":\"2\",\"answer\":\"7969762.03\"},{\"question\":\"3\",\"answer\":\"Business\"},{\"question\":\"4\",\"answer\":\"A\"}]"
+  }
+]

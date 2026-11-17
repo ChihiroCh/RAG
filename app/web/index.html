@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>多模态知识库 · PDF / 图片 / 表格</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="aurora aurora-a"></div>
+  <div class="aurora aurora-b"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10l2 2h6.5A1.5 1.5 0 0 1 20 7.5v10A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5z" />
+            <path d="M8.5 12.5h7M8.5 15.5h4" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>多模态知识库</h1>
+          <p>PDF · 图片 · 表格 统一检索与溯源</p>
+        </div>
+      </div>
+
+      <div class="status-cluster">
+        <span class="badge" id="badge-chunks"><i class="dot"></i><span>分块 0</span></span>
+        <span class="badge" id="badge-docs"><i class="dot dot-violet"></i><span>文件 0</span></span>
+        <span class="badge ghost" id="badge-model">qwen-plus</span>
+        <span class="pulse" title="服务运行中"></span>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="btn ghost" id="btn-incremental" title="仅处理新增/变更的文件">增量入库</button>
+        <button class="btn primary" id="btn-rebuild" title="忽略缓存，全量重建索引">重建索引</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>知识库概览</h2>
+            <span class="panel-hint" id="built-at">尚未构建</span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat">
+              <span class="stat-value" id="stat-docs">0</span>
+              <span class="stat-label">入库文件</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-chunks">0</span>
+              <span class="stat-label">检索分块</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-dim">1024</span>
+              <span class="stat-label">向量维度</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><h2>分块构成</h2></div>
+          <div class="type-bars" id="type-bars">
+            <div class="type-row"><span>文本</span><div class="bar"><i style="width:0%"></i></div><b>0</b></div>
+            <div class="type-row"><span>表格</span><div class="bar"><i style="width:0%"></i></div><b>0</b></div>
+            <div class="type-row"><span>图片</span><div class="bar"><i style="width:0%"></i></div><b>0</b></div>
+          </div>
+        </section>
+
+        <section class="panel panel-grow">
+          <div class="panel-head">
+            <h2>已入库文件</h2>
+            <span class="panel-hint" id="doc-count">0 个</span>
+          </div>
+          <div class="doc-search">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input id="doc-search" type="text" placeholder="按文件标识筛选，如 001" autocomplete="off" />
+          </div>
+          <div class="doc-list" id="doc-list">
+            <p class="empty-hint">索引尚未构建，点击右上角「重建索引」开始解析 files/ 目录。</p>
+          </div>
+        </section>
+
+        <section class="panel ingest-panel hidden" id="ingest-panel">
+          <div class="panel-head">
+            <h2>正在入库</h2>
+            <span class="panel-hint" id="ingest-stage">准备中</span>
+          </div>
+          <div class="progress"><i id="ingest-bar" style="width:0%"></i></div>
+          <p class="ingest-text" id="ingest-text">扫描源文件…</p>
+        </section>
+      </aside>
+
+      <section class="chat">
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="welcome" id="welcome">
+            <div class="welcome-mark">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>
+                <circle cx="12" cy="12" r="3.4"/>
+              </svg>
+            </div>
+            <h2>向你的资料库提问</h2>
+            <p>回答只来自 <code>files/</code> 中已入库的 PDF 与图片，并标注来源标识、文件名与页码。</p>
+            <div class="examples">
+              <button class="example" data-q="001 这篇报告主要讲了哪些内容？">001 这篇报告主要讲了哪些内容？</button>
+              <button class="example" data-q="010 这张日程表里，六天分别安排了什么课程？">010 这张日程表里，六天分别安排了什么课程？</button>
+              <button class="example" data-q="027 图中不同 OCR 模型在表格识别上的表现差异是什么？">027 图中不同 OCR 模型的表现差异？</button>
+            </div>
+          </div>
+          <div id="messages" class="messages"></div>
+        </div>
+
+        <div class="composer">
+          <div class="filter-chips" id="filter-chips"></div>
+          <div class="composer-inner">
+            <textarea id="input" rows="1" placeholder="输入问题，例如：006 的资产负债表期末余额是多少？"></textarea>
+            <div class="composer-actions">
+              <span class="hint">Enter 发送 · Shift + Enter 换行</span>
+              <button class="btn primary" id="btn-send">
+                发送
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+              </button>
+              <button class="btn ghost hidden" id="btn-stop">停止</button>
+            </div>
+          </div>
+          <p class="composer-note">回答仅基于知识库资料；引用卡片可回溯到原始文件、页码与图片。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="lightbox hidden" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="关闭">×</button>
+    <img id="lightbox-img" alt="预览" />
+  </div>
+
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

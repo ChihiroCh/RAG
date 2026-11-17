@@ -1,0 +1,20 @@
+{
+  "rows": 908,
+  "nonempty": 908,
+  "formats": {
+    "json": 40,
+    "string": 396,
+    "number": 365,
+    "json_array": 107
+  },
+  "errors": [],
+  "special": [
+    {
+      "id": 859,
+      "question": "请恢复 89.png 中红色的方块一共有多少个？",
+      "answer": "10",
+      "issue": "问题要求计数，但answer_format为结构JSON；按题意输出JSON数值"
+    }
+  ],
+  "note": "格式校验不代表正确率；859题存在题意与格式冲突"
+}
